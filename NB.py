@@ -33,10 +33,10 @@ class NB():
             for feature in range(X_test.shape[1]): 
                 pr_1 = pr_1 * self.__norm(x[feature], self.means[1].iloc[feature], self.std[1].iloc[feature])
                 pr_0 = pr_0 * self.__norm(x[feature], self.means[0].iloc[feature], self.std[0].iloc[feature])
-            gora = pr_1*self.p[1]
-            dol = pr_1*self.p[1] + pr_0*(1 - self.p[1])
+            numerator = pr_1*self.p[1]
+            denominator = pr_1*self.p[1] + pr_0*(1 - self.p[1])
             
-            prob_cond = gora/dol
+            prob_cond = numerator/denominator
             res.append([1-prob_cond, prob_cond])
         return res
         

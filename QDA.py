@@ -21,16 +21,16 @@ class QDA():
     
     def __mvn(self, x, mean, cov): 
         # calculate multivariate normal distribution
-        return multivariate_normal(mean=mean, cov=cov).pdf(x)
+        return multivariate_normal(mean=mean, cov=cov, allow_singular=True).pdf(x)
         
     def predict_proba(self, X_test): 
         if isinstance(X_test, pd.DataFrame): 
             X_test = X_test.to_numpy()
         res = []
         for x in X_test: 
-            gora = self.__mvn(x, self.means[1], self.sigma[1])*self.p[1]
-            dol = self.__mvn(x, self.means[1], self.sigma[1])*self.p[1] + self.__mvn(x, self.means[0], self.sigma[0])*(1 - self.p[0])
-            prob_cond = gora/dol
+            nominator = self.__mvn(x, self.means[1], self.sigma[1])*self.p[1]
+            denominator = self.__mvn(x, self.means[1], self.sigma[1])*self.p[1] + self.__mvn(x, self.means[0], self.sigma[0])*(1 - self.p[0])
+            prob_cond = nominator/denominator
             res.append([1-prob_cond, prob_cond])
         return res
         
